@@ -39,7 +39,7 @@ if ($stmt->affected_rows > 0) {
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = 'true';
         $mail->Username   = 'stackcodelab@gmail.com';
-        $mail->Password   = 'jerzygoscnqzuhqh';
+        $mail->Password   = 'DEBES_COLOCAR_TU_PASSWORD';
         $mail->SMTPSecure = 'ssl';
         $mail->Port       = 465;
 
