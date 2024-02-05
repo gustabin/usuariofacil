@@ -41,8 +41,13 @@ if ($stmt->affected_rows > 0) {
         $mail->isSMTP();
         $mail->Host       = getenv('SMTP_HOST');
         $mail->SMTPAuth   = 'true';
+<<<<<<< HEAD
         $mail->Username   = getenv('SMTP_USERNAME');
         $mail->Password   = getenv('SMTP_PASSWORD');
+=======
+        $mail->Username   = 'stackcodelab@gmail.com';
+        $mail->Password   = 'DEBES_COLOCAR_TU_PASSWORD';
+>>>>>>> 858cf89db470619954f800307657d989948e18a3
         $mail->SMTPSecure = 'ssl';
         $mail->Port       = getenv('SMTP_PORT');
 
