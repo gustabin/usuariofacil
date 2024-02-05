@@ -9,8 +9,11 @@ require '../PHPMailer/src/Exception.php';
 require '../PHPMailer/src/PHPMailer.php';
 require '../PHPMailer/src/SMTP.php';
 
+// Incluir el archivo de configuración
+require '../tools/config.php';
+
 // Conexión a la base de datos
-$conexion = new mysqli('localhost', 'root', '', 'usuariofacil');
+$conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Variable de entrada
 $email = $_POST['email'];
@@ -36,12 +39,12 @@ if ($stmt->affected_rows > 0) {
 
         $mail->SMTPDebug = 0;
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
+        $mail->Host       = getenv('SMTP_HOST');
         $mail->SMTPAuth   = 'true';
-        $mail->Username   = 'stackcodelab@gmail.com';
-        $mail->Password   = 'jerzygoscnqzuhqh';
+        $mail->Username   = getenv('SMTP_USERNAME');
+        $mail->Password   = getenv('SMTP_PASSWORD');
         $mail->SMTPSecure = 'ssl';
-        $mail->Port       = 465;
+        $mail->Port       = getenv('SMTP_PORT');
 
         $mail->setFrom('stackcodelab@gmail.com', 'Soporte Stackcodelab');
         $mail->addAddress($email);

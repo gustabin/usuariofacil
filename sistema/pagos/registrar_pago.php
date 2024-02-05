@@ -1,5 +1,7 @@
 <?php
-$conexion = new mysqli('localhost', 'root', '', 'usuariofacil');
+// Incluir el archivo de configuración
+require '../../tools/config.php';
+$conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 $response = array();
 

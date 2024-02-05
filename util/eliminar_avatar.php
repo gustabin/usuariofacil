@@ -1,6 +1,8 @@
 <?php
+// Incluir el archivo de configuración
+require '../tools/config.php';
 // Conexión a la base de datos
-$conexion = new mysqli('localhost', 'root', '', 'usuariofacil');
+$conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Variable de entrada
 $usuarioID = 1;

@@ -2,9 +2,11 @@
 $nombre_usuario = "Nombre del usuario";
 $modulo = "Pagos";
 require_once("../tools/header.php");
+// Incluir el archivo de configuración
+require '../tools/config.php';
 
 // Conexión a la base de datos
-$conexion = new mysqli('localhost', 'root', '', 'usuariofacil');
+$conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Obtener el ID del usuario logueado
 $usuarioID = $_SESSION['usuarioID'];

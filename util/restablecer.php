@@ -1,8 +1,10 @@
 <?php
 // Iniciar la sesión
 session_start();
+// Incluir el archivo de configuración
+require '../tools/config.php';
 // Conexión a la base de datos y configuración de la sesión
-$conexion = new mysqli('localhost', 'root', '', 'usuariofacil');
+$conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Verificar si se proporcionó un token en la URL
 if (isset($_GET['token'])) {
