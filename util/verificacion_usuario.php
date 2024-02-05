@@ -5,7 +5,7 @@ require '../tools/config.php';
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Variable de entrada
-$usuarioID = 14;
+// $usuarioID = 14;
 
 // Consulta preparada para marcar un usuario como verificado
 $query = "UPDATE Usuarios SET Verificado = true WHERE UsuarioID = ?";

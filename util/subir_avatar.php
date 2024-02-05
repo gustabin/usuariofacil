@@ -5,7 +5,7 @@ require '../tools/config.php';
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Variables de entrada
-$usuarioID = 1;
+// $usuarioID = 1;
 //    $avatar = $_FILES['avatar']; // Suponiendo que se ha enviado el archivo mediante un formulario
 
 $nombreArchivo = 'logo.png';

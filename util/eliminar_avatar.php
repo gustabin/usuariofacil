@@ -5,7 +5,7 @@ require '../tools/config.php';
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Variable de entrada
-$usuarioID = 1;
+// $usuarioID = 1;
 
 // Obtener la URL del avatar actual en la base de datos
 $selectQuery = "SELECT AvatarURL FROM Perfiles WHERE UsuarioID = ?";
