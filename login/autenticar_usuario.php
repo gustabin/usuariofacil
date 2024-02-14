@@ -25,9 +25,14 @@ try {
     if (password_verify($password, $hashAlmacenado)) {
         // La contraseña es correcta
         session_start();
+
+        // Verificar si intentar_pago está presente en la solicitud
+        $intentarPago = isset($_SESSION['intentar_pago']) ? true : false;
+
         $_SESSION['usuarioID'] = $usuarioID;
         $response['status'] = 'exito';
         $response['message'] = 'Inicio de sesión exitoso';
+        $response['intentar_pago'] = $intentarPago;
     } else {
         // La contraseña es incorrecta
         $response['status'] = 'error';

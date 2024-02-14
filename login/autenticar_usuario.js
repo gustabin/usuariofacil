@@ -20,8 +20,13 @@ $(document).ready(function () {
                         title: 'Éxito',
                         text: response.message
                     });
-                    // Redirigir a la página de login
-                    window.location.href = '../sistema/index.php';
+                    if (response.intentar_pago) {
+                        // Redirigir a la página de pago
+                        window.location.href = '../index.html';
+                    } else {
+                        // Redirigir a la página de login
+                        window.location.href = '../sistema/index.php';
+                    }
                 } else {
                     Swal.fire({
                         icon: 'error',
