@@ -3,30 +3,43 @@ $nombre_usuario = "Nombre del usuario";
 $modulo = "Pagos";
 require_once("../tools/header.php");
 // Incluir el archivo de configuración
-require '../tools/config.php';
+// require '../tools/config.php';
 
 // Conexión a la base de datos
-$conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+// $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Obtener el ID del usuario logueado
-$usuarioID = $_SESSION['usuarioID'];
+// $usuarioID = $_SESSION['usuarioID'];
 
-// Obtener productos disponibles desde la tabla Pedidos para el usuario logueado
-$queryProductos = "SELECT * FROM Pedidos WHERE UsuarioID = ?";
-$stmtProductos = $conexion->prepare($queryProductos);
+// // Obtener productos disponibles desde la tabla Pedidos para el usuario logueado
+// $queryProductos = "SELECT * FROM Pedidos WHERE UsuarioID = ?";
+// $stmtProductos = $conexion->prepare($queryProductos);
 
-if (!$stmtProductos) {
-    die('Error en la preparación de la consulta: ' . $conexion->error);
-}
+// if (!$stmtProductos) {
+//     die('Error en la preparación de la consulta: ' . $conexion->error);
+// }
 
-$stmtProductos->bind_param('i', $usuarioID);
-$stmtProductos->execute();
-$resultProductos = $stmtProductos->get_result();
+// $stmtProductos->bind_param('i', $usuarioID);
+// $stmtProductos->execute();
+// $resultProductos = $stmtProductos->get_result();
 
-// Cerrar la conexión
-$stmtProductos->close();
-$conexion->close();
+// // Cerrar la conexión
+// $stmtProductos->close();
+// $conexion->close();
 ?>
+<style>
+    /* Estilos para resaltar los pagos realizados */
+    .pago-realizado {
+        background-color: #c8e6c9;
+        /* Verde claro */
+    }
+
+    /* Estilos para resaltar los pagos pendientes */
+    .pago-pendiente {
+        background-color: #ffcdd2;
+        /* Rojo claro */
+    }
+</style>
 
 <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
@@ -54,7 +67,7 @@ $conexion->close();
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><?php echo $modulo ?></h3>
+                        <h3 class="card-title">Listado de <?php echo $modulo ?></h3>
 
                         <div class="card-tools">
 
@@ -62,25 +75,19 @@ $conexion->close();
                     </div>
                     <div class="card-body">
                         <div class="container">
-                            <form id="pagoForm" class="row justify-content-center align-items-center">
-                                <div class="form-group col-12 col-md-4 mb-3">
-                                    <label for="selectProductoPago" class="sr-only">Producto:</label>
-                                    <select class="form-control" id="selectProductoPago" name="producto" required>
-                                        <?php
-                                        while ($row = $resultProductos->fetch_assoc()) {
-                                            echo "<option value='" . $row['Producto'] . "'>" . $row['Producto'] . "</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="form-group col-12 col-md-3 mb-3">
-                                    <label for="inputMonto" class="sr-only">Monto:</label>
-                                    <input type="number" step="0.01" class="form-control" id="inputMonto" name="monto" min="0.01" required>
-                                </div>
-                                <div class="form-group col-12 col-md-2 mb-3">
-                                    <button type="submit" class="btn btn-primary btn-block">Realizar Pago</button>
-                                </div>
-                            </form>
+                            <table border="1" class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>ID Pago</th>
+                                        <th>ID Usuario</th>
+                                        <th>Monto</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-pagos">
+                                    <!-- Las filas se agregarán dinámicamente con JavaScript -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <!-- /.card-body -->
