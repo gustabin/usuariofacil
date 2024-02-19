@@ -71,8 +71,6 @@ function obtenerCarrito() {
     });
 }
 
-
-
 // Función para mostrar el carrito y total
 function mostrarCarrito() {
     var carritoContainer = $("#carrito");
@@ -202,10 +200,17 @@ function realizarPago() {
                             text: `Pago de $${response.totalPagar} realizado con éxito.`,
                         });
 
+                        // Decrementar la cantidad de unidades en stock en la base de datos
+                        decrementarStockEnBaseDeDatos(carritoProductos);
+
                         // Vaciar el carrito
                         carritoProductos = [];
                         // Actualizar la interfaz gráfica del carrito
                         mostrarCarrito();
+                        // Recargar la página después de un breve intervalo
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500); // 1500 milisegundos (1.5 segundos), puedes ajustar este valor según tus necesidades
                     } else {
                         // Hubo un error en el servidor
                         Swal.fire({
@@ -234,3 +239,21 @@ function realizarPago() {
     }
 }
 
+function decrementarStockEnBaseDeDatos(productos) {
+    $.ajax({
+        url: 'compras/decrementar_stock.php',
+        method: 'POST',
+        data: { productos: productos },
+        dataType: 'json',
+        success: function (response) {
+            if (response.status === 'exito') {
+                console.log('Stock decrementado en la base de datos');
+            } else {
+                console.error('Error al decrementar el stock en la base de datos:', response.message);
+            }
+        },
+        error: function (error) {
+            console.error('Error al comunicarse con el servidor para decrementar el stock:', error);
+        }
+    });
+}

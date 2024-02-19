@@ -12,7 +12,7 @@ $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 $usuarioID = $_SESSION['usuarioID'];
 
 // Obtener productos disponibles desde la tabla Pedidos para el usuario logueado
-$queryProductos = "SELECT DISTINCT Producto FROM Pedidos WHERE UsuarioID = ?";
+$queryProductos = "SELECT * FROM Pedidos WHERE UsuarioID = ?";
 $stmtProductos = $conexion->prepare($queryProductos);
 
 if (!$stmtProductos) {

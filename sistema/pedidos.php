@@ -38,25 +38,48 @@ require_once("../tools/header.php");
                     </div>
                     <div class="card-body">
 
-                        <div class="container">
-                            <form id="pedidoForm" class="row justify-content-center align-items-center">
-                                <div class="form-group col-12 col-md-4 mb-3">
-                                    <label for="selectProducto" class="sr-only">Producto:</label>
-                                    <select class="form-control" id="selectProducto" name="producto" required>
-                                        <!-- Opciones de productos que puedes cargar dinámicamente desde la base de datos -->
-                                        <option value="producto1">Producto 1</option>
-                                        <option value="producto2">Producto 2</option>
-                                        <!-- Agrega más opciones según tus productos -->
-                                    </select>
+                        <!-- Contenedor principal -->
+                        <div class="container mt-5">
+
+
+                            <!-- Tabla para mostrar los pedidos -->
+                            <table id="tablaPedidos" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID Pedido</th>
+                                        <th>Fecha Pedido</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Los datos de la tabla se llenarán dinámicamente aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Modal para mostrar el detalle del pedido -->
+                        <div class="modal" id="detallePedidoModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Encabezado del Modal -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Detalle del Pedido</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Contenido del Modal -->
+                                    <div class="modal-body">
+                                        <!-- Los detalles del pedido se mostrarán aquí -->
+                                    </div>
+
+                                    <!-- Botón para cerrar el Modal -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+
                                 </div>
-                                <div class="form-group col-12 col-md-3 mb-3">
-                                    <label for="inputCantidad" class="sr-only">Cantidad:</label>
-                                    <input type="number" class="form-control" id="inputCantidad" name="cantidad" min="1" required>
-                                </div>
-                                <div class="form-group col-12 col-md-2 mb-3">
-                                    <button type="submit" class="btn btn-primary btn-block">Realizar Pedido</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
 
 

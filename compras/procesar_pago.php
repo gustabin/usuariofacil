@@ -189,6 +189,9 @@ function guardarPedidoEnBaseDeDatos($productos, $totalPagar, $usuarioID)
     // $stmtPagos->close();
     $conexion->close();
 
+    // Limpiar la variable de sesión del carrito
+    unset($_SESSION['carrito']);
+
     // Devolver la respuesta en formato JSON
     header('Content-Type: application/json');
     echo json_encode($response);
