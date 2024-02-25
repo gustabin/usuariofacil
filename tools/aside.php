@@ -63,6 +63,14 @@
                             </ul> -->
                 </li>
                 <li class="nav-item">
+                    <a href="roles.php" class="nav-link">
+                        <i class="nav-icon fas fa-user-tie"></i>
+                        <p>
+                            Roles
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="pagos.php" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
