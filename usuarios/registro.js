@@ -2,7 +2,6 @@ $(document).ready(function () {
     // Intercepta el envío del formulario
     $('#registroForm').submit(function (e) {
         e.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
-
         // Realiza la solicitud AJAX al microservicio
         $.ajax({
             type: 'POST',

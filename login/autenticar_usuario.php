@@ -14,11 +14,11 @@ $response = array();
 
 try {
     // Consulta preparada para obtener el hash de la contraseña del usuario
-    $query = "SELECT UsuarioId, PasswordHash FROM Usuarios WHERE Email = ?";
+    $query = "SELECT UsuarioId, PasswordHash, Rol FROM Usuarios WHERE Email = ?";
     $stmt = $conexion->prepare($query);
     $stmt->bind_param('s', $email);
     $stmt->execute();
-    $stmt->bind_result($usuarioID, $hashAlmacenado);
+    $stmt->bind_result($usuarioID, $hashAlmacenado, $rol);
     $stmt->fetch();
 
     // Verificar la contraseña usando password_verify
@@ -30,6 +30,7 @@ try {
         $intentarPago = isset($_SESSION['intentar_pago']) ? true : false;
 
         $_SESSION['usuarioID'] = $usuarioID;
+        $_SESSION['rol'] = $rol;
         $response['status'] = 'exito';
         $response['message'] = 'Inicio de sesión exitoso';
         $response['intentar_pago'] = $intentarPago;

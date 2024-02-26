@@ -1,5 +1,6 @@
 <?php
 // Incluir el archivo de configuración
+
 require '../tools/config.php';
 // Conexión a la base de datos (usando MySQLi)
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -13,7 +14,6 @@ $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
 // Array para la respuesta JSON
 $response = array();
-
 try {
     // Consulta preparada para insertar un nuevo usuario
     $query = "INSERT INTO Usuarios (Email, PasswordHash, TokenRecuperacion) VALUES (?, ?, ?)";
@@ -33,8 +33,8 @@ try {
         // Éxito al insertar el usuario
 
         // Envío del correo de verificación
-        require 'enviar_correo_verificacion.php';
-        enviarCorreoVerificacion($email, $token);
+        // require 'enviar_correo_verificacion.php';
+        // enviarCorreoVerificacion($email, $token);
 
         $response['status'] = 'exito';
         $response['message'] = 'Usuario registrado correctamente';
