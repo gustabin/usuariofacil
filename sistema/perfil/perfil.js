@@ -71,6 +71,10 @@ function cargarPerfil() {
             // El servidor responderá con los datos del perfil en formato JSON
             const perfilDatos = JSON.parse(response);
 
+            // // Llenar el formulario con los datos del perfil
+            $("#nombre").val(perfilDatos.nombre);
+            $("#apellido").val(perfilDatos.apellido);
+
             // Llama a la función para mostrar el perfil
             mostrarPerfil(perfilDatos);
         },

@@ -10,10 +10,10 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="dist/img/user2-160x160.png" class="img-circle elevation-2" alt="User Image">
+                <img src="perfil/imagen/user_default.png" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block"><?php echo $nombre_usuario ?></a>
+                <a href="#" class="d-block"><span id="nombre_usuario"></span></a>
             </div>
         </div>
 
@@ -118,6 +118,34 @@
                                 </li>
                             </ul> -->
                 </li>
+                <?php
+                if ($_SESSION['rol'] == 1) {
+                ?>
+                    <li class="nav-item">
+                        <a href="pdfUsuarios.php" class="nav-link">
+                            <i class="nav-icon fas fa-file-pdf"></i>
+                            <p>
+                                PDF Usuarios
+                            </p>
+                        </a>
+                    </li>
+                <?php
+                }
+                ?>
+                <?php
+                if ($_SESSION['rol'] == 1) {
+                ?>
+                    <li class="nav-item">
+                        <a href="pdfProductos.php" class="nav-link">
+                            <i class="nav-icon fas fa-file-pdf"></i>
+                            <p>
+                                PDF Productos
+                            </p>
+                        </a>
+                    </li>
+                <?php
+                }
+                ?>
                 <li class="nav-item">
                     <a href="salir.php" class="nav-link">
                         <i class="fas fa-sign-out-alt"></i>
