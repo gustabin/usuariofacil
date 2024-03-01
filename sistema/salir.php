@@ -9,5 +9,5 @@ session_unset();
 session_destroy();
 
 // Redirige a home.html
-header("Location: ../index.html");
+header("Location: ../");
 exit();

@@ -22,7 +22,7 @@ $(document).ready(function () {
                     });
                     if (response.intentar_pago) {
                         // Redirigir a la página de pago
-                        window.location.href = '../index.html';
+                        window.location.href = '../';
                     } else {
                         // Redirigir a la página de login
                         window.location.href = '../sistema/index.php';

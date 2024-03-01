@@ -147,10 +147,18 @@
                 }
                 ?>
                 <li class="nav-item">
+                    <a href="../" class="nav-link">
+                        <i class="nav-icon fas fa-store"></i>
+                        <p>
+                            Ir a la tienda
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="salir.php" class="nav-link">
                         <i class="fas fa-sign-out-alt"></i>
                         <p>
-                            Salir
+                            Cerrar sesión
                         </p>
                     </a>
                 </li>

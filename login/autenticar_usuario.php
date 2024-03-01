@@ -28,7 +28,7 @@ try {
 
         // Verificar si intentar_pago está presente en la solicitud
         $intentarPago = isset($_SESSION['intentar_pago']) ? true : false;
-
+        $_SESSION['intentar_pago'] = false;
         $_SESSION['usuarioID'] = $usuarioID;
         $_SESSION['rol'] = $rol;
         $response['status'] = 'exito';
