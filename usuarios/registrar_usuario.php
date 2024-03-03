@@ -28,6 +28,29 @@ try {
     $stmt->bind_param('sss', $email, $password, $token);
     $stmt->execute();
 
+
+    // Obtener el ID del usuario recién insertado
+    $usuarioID = $stmt->insert_id;
+
+    // Consulta preparada para insertar un nuevo perfil asociado al usuario
+    $queryPerfil = "INSERT INTO perfiles (UsuarioID, Nombre, Apellido, AvatarURL) VALUES (?, ?, ?, ?)";
+    $stmtPerfil = $conexion->prepare($queryPerfil);
+
+    if (!$stmtPerfil) {
+        throw new Exception('Error en la preparación de la consulta para el perfil: ' . $conexion->error);
+    }
+
+    // Valores para el nuevo perfil (puedes ajustar esto según tus necesidades)
+    $nombre = 'John';
+    $apellido = 'Doe';
+    $avatarURL = 'imagen/user_default.png';
+
+    $stmtPerfil->bind_param('isss', $usuarioID, $nombre, $apellido, $avatarURL);
+    $stmtPerfil->execute();
+
+    // Cerrar la conexión para el perfil
+    $stmtPerfil->close();
+
     // Verificar si la operación fue exitosa
     if ($stmt->affected_rows > 0) {
         // Éxito al insertar el usuario
