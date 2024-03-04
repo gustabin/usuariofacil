@@ -11,11 +11,19 @@ $(document).ready(function () {
             success: function (response) {
                 // Muestra el Sweet Alert según la respuesta del microservicio
                 if (response.status === 'exito') {
-                    // Redirigir al index después de 2 segundos (ajusta el tiempo según tu preferencia)
-                    setTimeout(function () {
-                        window.location.href = 'index.php';
-                    }, 2000);
-                    Swal.fire('Éxito', response.message, 'success');
+                    // Muestra un Sweet Alert con un botón OK
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: response.message,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'index.php';
+                        }
+                    });
                 } else {
                     Swal.fire('Error', response.message, 'error');
                 }

@@ -102,7 +102,7 @@ session_start();
         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
           <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Carrito</a>
           <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="privacidad.html">Privacidad</a>
-          <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Contacto</a>
+          <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="contacto.php">Contacto</a>
           <?php
           if (!isset($_SESSION['usuarioID'])) { ?>
             <a class="py-2 link-body-emphasis text-decoration-none" href="login/">Login</a>
@@ -147,7 +147,7 @@ session_start();
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
           <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Carrito</a></li>
           <li class="nav-item"><a href="privacidad.html" class="nav-link px-2 text-body-secondary">Privacidad</a></li>
-          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Contacto</a></li>
+          <li class="nav-item"><a href="contacto.php" class="nav-link px-2 text-body-secondary">Contacto</a></li>
           <li class="nav-item"><a href="login/" class="nav-link px-2 text-body-secondary">Login</a></li>
         </ul>
         <p class="text-center text-body-secondary"><a href="https://www.stackcodelab.com" style="text-decoration: none;"> 2024 Stackcodelab, Inc </a></p>
