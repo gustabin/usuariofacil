@@ -122,6 +122,20 @@
                 if ($_SESSION['rol'] == 1) {
                 ?>
                     <li class="nav-item">
+                        <a href="contactos.php" class="nav-link">
+                            <i class="nav-icon fas fa-address-book"></i>
+                            <p>
+                                Contáctos
+                            </p>
+                        </a>
+                    </li>
+                <?php
+                }
+                ?>
+                <?php
+                if ($_SESSION['rol'] == 1) {
+                ?>
+                    <li class="nav-item">
                         <a href="pdfUsuarios.php" class="nav-link">
                             <i class="nav-icon fas fa-file-pdf"></i>
                             <p>
