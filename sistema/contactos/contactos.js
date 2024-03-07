@@ -51,11 +51,16 @@ function eliminarContacto(contactoID) {
         confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
         if (result.isConfirmed) {
+            // Obtener el token CSRF desde el elemento HTML
+            var csrfToken = $('#csrfToken').data('csrf');
             // Realizar petición AJAX para eliminar el contacto
             $.ajax({
                 url: 'contactos/eliminar_contacto.php?contactoID=' + contactoID,
                 type: 'GET',
                 dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
                 success: function (response) {
                     if (response.success) {
                         // Recargar la tabla después de la eliminación
@@ -66,6 +71,7 @@ function eliminarContacto(contactoID) {
                             success: function (data) {
                                 llenarTabla(data);
                                 Swal.fire('Éxito', 'El contacto ha sido eliminado correctamente', 'success');
+                                location.reload(true);
                             },
                             error: function (error) {
                                 Swal.fire('Error', 'Hubo un error al cargar los contactos', 'error');

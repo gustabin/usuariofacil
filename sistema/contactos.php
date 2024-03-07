@@ -3,6 +3,19 @@ $nombre_usuario = "Nombre del usuario";
 $modulo = "Contáctos";
 require_once("../tools/header.php");
 if ($_SESSION['rol'] == 1) {
+    // Función para obtener y generar un nuevo token CSRF
+    function obtener_csrf_token()
+    {
+        if (!isset($_SESSION['csrf_token'])) {
+            // Genera un token único (puedes usar funciones más avanzadas para esto)
+            $token = bin2hex(random_bytes(32));
+
+            // Almacena el token en la sesión para validar en solicitudes posteriores
+            $_SESSION['csrf_token'] = $token;
+        }
+
+        return $_SESSION['csrf_token'];
+    }
 ?>
 
     <body class="hold-transition sidebar-mini">
@@ -57,6 +70,8 @@ if ($_SESSION['rol'] == 1) {
                                         <!-- Los datos de la tabla se llenarán dinámicamente aquí -->
                                     </tbody>
                                 </table>
+                                <!-- Agrega un elemento oculto para almacenar el token CSRF -->
+                                <div id="csrfToken" data-csrf="<?php echo obtener_csrf_token(); ?>"></div>
                             </div>
 
                             <!-- Modal para mostrar el detalle del contacto -->

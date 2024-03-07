@@ -6,33 +6,42 @@ require '../../tools/config.php';
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 try {
-    // Obtener el ID del contacto desde la consulta GET
-    $contactoID = $_GET['contactoID'];
+    // Obtener el token CSRF enviado
+    $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
 
-    // Consulta SQL para eliminar el contacto
-    $query = "DELETE FROM contactos WHERE id = ?";
+    // Verificar si el token CSRF enviado es válido
+    if (!empty($_SESSION['csrf_token']) && !empty($token) && hash_equals($_SESSION['csrf_token'], $token)) {
+        // Obtener el ID del contacto desde la consulta GET
+        $contactoID = $_GET['contactoID'];
 
-    // Preparar la consulta
-    $stmt = $conexion->prepare($query);
+        // Consulta SQL para eliminar el contacto
+        $query = "DELETE FROM contactos WHERE id = ?";
 
-    if ($stmt) {
-        // Vincular el parámetro
-        $stmt->bind_param("i", $contactoID);
+        // Preparar la consulta
+        $stmt = $conexion->prepare($query);
 
-        // Ejecutar la consulta
-        $stmt->execute();
+        if ($stmt) {
+            // Vincular el parámetro
+            $stmt->bind_param("i", $contactoID);
 
-        // Verificar si la eliminación fue exitosa
-        if ($stmt->affected_rows > 0) {
-            echo json_encode(array('success' => true));
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Verificar si la eliminación fue exitosa
+            if ($stmt->affected_rows > 0) {
+                echo json_encode(array('success' => true));
+            } else {
+                echo json_encode(array('success' => false));
+            }
+
+            // Cerrar el statement
+            $stmt->close();
         } else {
-            echo json_encode(array('success' => false));
+            throw new Exception("Error al preparar la consulta");
         }
-
-        // Cerrar el statement
-        $stmt->close();
+        unset($_SESSION['csrf_token']);
     } else {
-        throw new Exception("Error al preparar la consulta");
+        throw new Exception("Token CSRF no válido");
     }
 } catch (Exception $e) {
     echo json_encode(array('error' => $e->getMessage()));
