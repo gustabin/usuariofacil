@@ -5,13 +5,10 @@ require '../tools/config.php';
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Variables de entrada
-// $usuarioID = 1;
-//    $avatar = $_FILES['avatar']; // Suponiendo que se ha enviado el archivo mediante un formulario
-
 $nombreArchivo = 'logo.png';
-$rutaTemporal = 'imagen/' . $nombreArchivo;
 
-// Construir una estructura similar a la que se obtiene de $_FILES['avatar']
+// Obtener información sobre el archivo simulado
+$rutaTemporal = 'imagen/' . $nombreArchivo;
 $archivoSimulado = array(
     'name'     => $nombreArchivo,
     'type'     => mime_content_type($rutaTemporal),
@@ -20,23 +17,48 @@ $archivoSimulado = array(
     'size'     => filesize($rutaTemporal)
 );
 
-// Usar la variable simulada en lugar de $_FILES['avatar']
-$avatar = $archivoSimulado;
+// Validar la existencia y formato del archivo
+if (!file_exists($archivoSimulado['tmp_name']) || $archivoSimulado['error'] !== UPLOAD_ERR_OK) {
+    // Manejar el error, por ejemplo, mostrar un mensaje o redirigir
+    die("Error al subir el archivo.");
+}
 
-// Verificar y mover el archivo a la ubicación deseada en el servidor
-// Generar una URL o ruta de almacenamiento y almacenarla en la base de datos
-//    $rutaAlmacenamiento = "imagen/usuario/avatar" . $avatar['name'];
+// Validar el tipo de archivo
+$allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+if (!in_array($archivoSimulado['type'], $allowedTypes)) {
+    // Manejar el error, por ejemplo, mostrar un mensaje o redirigir
+    die("Tipo de archivo no permitido.");
+}
+
+// Configurar la carpeta de almacenamiento
 $directorioAlmacenamiento = "imagen/";
-$rutaAlmacenamiento =  $directorioAlmacenamiento . "logoNuevoNombre.png";
-// move_uploaded_file($avatar['tmp_name'], $rutaAlmacenamiento);
-copy($avatar['tmp_name'], $rutaAlmacenamiento);
 
-// Actualizar la URL del avatar en la base de datos
-$updateQuery = "UPDATE Perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
-$updateStmt = $conexion->prepare($updateQuery);
-$updateStmt->bind_param('si', $rutaAlmacenamiento, $usuarioID);
-$updateStmt->execute();
+// Generar un nombre de archivo único
+$nombreArchivoUnico = uniqid() . '_' . $nombreArchivo;
+
+// Construir la ruta de almacenamiento
+$rutaAlmacenamiento = $directorioAlmacenamiento . $nombreArchivoUnico;
+
+// Mover el archivo a la ubicación deseada en el servidor
+if (move_uploaded_file($archivoSimulado['tmp_name'], $rutaAlmacenamiento)) {
+    // Actualizar la URL del avatar en la base de datos
+    $updateQuery = "UPDATE Perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
+    $updateStmt = $conexion->prepare($updateQuery);
+    $updateStmt->bind_param('si', $rutaAlmacenamiento, $usuarioID);
+    $updateStmt->execute();
+
+    if ($updateStmt->affected_rows > 0) {
+        echo "Archivo subido y base de datos actualizada correctamente.";
+    } else {
+        echo "Error al actualizar la base de datos.";
+    }
+
+    // Cerrar la conexión
+    $updateStmt->close();
+} else {
+    // Manejar el error, por ejemplo, mostrar un mensaje o redirigir
+    echo "Error al mover el archivo.";
+}
 
 // Cerrar la conexión
-$updateStmt->close();
 $conexion->close();

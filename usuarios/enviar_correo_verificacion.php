@@ -38,8 +38,7 @@ function enviarCorreoVerificacion($email, $token)
     try {
         // Envío del correo de verificación
         $mail->send();
-        echo 'El correo electrónico de verificación ha sido enviado.<br><br>';
-        echo "Por favor, verifica tu dirección de correo electrónico antes de iniciar sesión.";
+        echo 'El correo electrónico de verificación ha sido enviado. Por favor, verifica tu dirección de correo electrónico antes de iniciar sesión.';
     } catch (Exception $e) {
         echo "Error al enviar el correo electrónico de verificación: {$mail->ErrorInfo}";
     }

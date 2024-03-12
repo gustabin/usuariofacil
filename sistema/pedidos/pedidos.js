@@ -3,7 +3,7 @@
 $(document).ready(function () {
     // Obtener los datos de los pedidos mediante AJAX
     $.ajax({
-        url: 'pedidos/obtenerPedidos.php',
+        url: 'pedidos/obtener_pedidos.php',
         type: 'GET',
         dataType: 'json',
         success: function (data) {

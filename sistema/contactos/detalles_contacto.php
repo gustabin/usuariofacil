@@ -6,6 +6,10 @@ require '../../tools/config.php';
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 mysqli_set_charset($conexion, 'utf8');
 try {
+    // Validar la presencia y el tipo del parámetro contactoID
+    if (!isset($_GET['contactoID']) || !is_numeric($_GET['contactoID'])) {
+        throw new Exception("Parámetro 'contactoID' no válido");
+    }
     // Obtener el ID del contacto desde la consulta GET
     $contactoID = $_GET['contactoID'];
 

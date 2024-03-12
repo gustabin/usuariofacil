@@ -1,6 +1,5 @@
 <?php
 //Importar clases PHPMailer al espacio de nombres global
-//Estos deben estar en la parte superior de tu script, no dentro de una función
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -15,39 +14,39 @@ require '../tools/config.php';
 // Conexión a la base de datos
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
-// Variable de entrada
-$email = $_POST['email'];
-
-// Generar un token único para el restablecimiento de contraseña
-$token = bin2hex(random_bytes(32));
-
-// Almacenar el token y la fecha de solicitud en la base de datos
-$query = "UPDATE Usuarios SET TokenRecuperacion = ?, FechaRecuperacion = NOW() WHERE Email = ?";
-$stmt = $conexion->prepare($query);
-$stmt->bind_param('ss', $token, $email);
-$stmt->execute();
-// var_dump($token . " " . $email);
+// Variable de entrada (validación básica)
+$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 
 // Array para la respuesta JSON
 $response = array();
 
-if ($stmt->affected_rows > 0) {
-    // La actualización fue exitosa, continuar con el envío del correo electrónico
-    try {
-        // Enviar un correo electrónico al usuario con el enlace de restablecimiento que incluye el token
+try {
+    // Validar la dirección de correo electrónico
+    if (!$email) {
+        throw new Exception('Dirección de correo electrónico no válida.');
+    }
+
+    // Generar un token único y seguro para el restablecimiento de contraseña
+    $token = password_hash(bin2hex(random_bytes(32)), PASSWORD_DEFAULT);
+
+    // Almacenar el token y la fecha de solicitud en la base de datos
+    $query = "UPDATE Usuarios SET TokenRecuperacion = ?, FechaRecuperacion = NOW() WHERE Email = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param('ss', $token, $email);
+    $stmt->execute();
+
+    // Verificar si la actualización fue exitosa
+    if ($stmt->affected_rows > 0) {
+        // La actualización fue exitosa, continuar con el envío del correo electrónico
         $mail = new PHPMailer(true);
 
+        // Configuración del servidor SMTP
         $mail->SMTPDebug = 0;
         $mail->isSMTP();
         $mail->Host       = getenv('SMTP_HOST');
         $mail->SMTPAuth   = 'true';
-<<<<<<< HEAD
         $mail->Username   = getenv('SMTP_USERNAME');
         $mail->Password   = getenv('SMTP_PASSWORD');
-=======
-        $mail->Username   = 'stackcodelab@gmail.com';
-        $mail->Password   = 'DEBES_COLOCAR_TU_PASSWORD';
->>>>>>> 858cf89db470619954f800307657d989948e18a3
         $mail->SMTPSecure = 'ssl';
         $mail->Port       = getenv('SMTP_PORT');
 
@@ -55,43 +54,40 @@ if ($stmt->affected_rows > 0) {
         $mail->addAddress($email);
         $mail->CharSet = 'UTF-8';
 
-        //Contenido
+        // Contenido del correo electrónico
         $mail->isHTML(true);
         $mail->Subject = 'Restablecimiento de Contraseña';
         $mail->Body    = "Hola,\n\nHemos recibido una solicitud para restablecer tu contraseña. " .
             "Haz clic en el siguiente enlace para restablecer tu contraseña:\n\n" .
             "http://tudominio.com/restablecer.php?token=$token\n\n" .
             "Si no solicitaste este restablecimiento, puedes ignorar este correo.";
+
+        // Envío del correo electrónico
         $mailSent = $mail->send();
 
         // Verificar si el correo electrónico se envió correctamente
         if ($mailSent) {
-            // echo 'El correo electrónico ha sido enviado.\n\n';
-            // echo "http://tudominio.com/restablecer.php?token=$token\n\n";
             $response['status'] = 'exito';
             $response['message'] = 'El correo electrónico ha sido enviado.';
         } else {
-            // Mostrar un mensaje de error si no se pudo enviar el correo electrónico
-            // echo "Error al enviar el correo electrónico: {$mail->ErrorInfo}";
-            $response['status'] = 'error';
-            $response['message'] = 'Error al enviar el correo electrónico:' . $mail->ErrorInfo;
+            throw new Exception('Error al enviar el correo electrónico:' . $mail->ErrorInfo);
         }
-    } catch (Exception $e) {
-        // Capturar excepciones de PHPMailer
-        // echo "Error al enviar el correo electrónico: {$e->getMessage()}";
-        $response['status'] = 'error';
-        $response['message'] = 'Error al enviar el correo electrónico:' . $e->getMessage();
+    } else {
+        throw new Exception('Error: No se pudo actualizar la base de datos.');
     }
-} else {
-    // La actualización no fue exitosa, mostrar un mensaje de error
-    // echo 'Error: No se pudo actualizar la base de datos.';
+} catch (Exception $e) {
+    // Manejar la excepción y proporcionar un mensaje de error personalizado
     $response['status'] = 'error';
-    $response['message'] = 'Error: No se pudo actualizar la base de datos.';
+    $response['message'] = 'Error al restablecer la contraseña: ' . $e->getMessage();
+} finally {
+    // Cerrar la conexión
+    if (isset($stmt)) {
+        $stmt->close();
+    }
+    if (isset($conexion)) {
+        $conexion->close();
+    }
 }
-
-// Cerrar la conexión
-$stmt->close();
-$conexion->close();
 
 // Devolver la respuesta en formato JSON
 header('Content-Type: application/json');

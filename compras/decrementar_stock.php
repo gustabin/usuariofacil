@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+$response = array();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productos = isset($_POST['productos']) ? $_POST['productos'] : [];
 
@@ -17,6 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response['message'] = 'Error de conexión a la base de datos: ' . $conexion->connect_error;
         } else {
             try {
+                // Comprueba si la sesión está iniciada
+                if (!isset($_SESSION['usuarioID'])) {
+                    throw new Exception("La sesión no está iniciada correctamente.");
+                }
+
                 // Comienza una transacción
                 $conexion->begin_transaction();
 
@@ -47,9 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Cerrar la conexión a la base de datos
+            if (isset($stmtUpdateStock)) {
+                $stmtUpdateStock->close();
+            }
 
-
-            $stmtUpdateStock->close();
             $conexion->close();
         }
     } else {

@@ -2,17 +2,22 @@
 // Incluir el archivo de configuración
 require '../tools/config.php';
 
-// Conexión a la base de datos
-$conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
-// Variables de entrada
-$email = $_POST['email'];
-$password = $_POST['password'];
+// Variables de entrada (validación básica)
+$email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) : null;
+$password = isset($_POST['password']) ? $_POST['password'] : null;
 
 // Array para la respuesta JSON
 $response = array();
 
 try {
+    // Validar la entrada
+    if (!$email || !$password) {
+        throw new Exception('Correo electrónico o contraseña no válidos.');
+    }
+
+    // Conexión a la base de datos
+    $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+
     // Consulta preparada para obtener el hash de la contraseña del usuario
     $query = "SELECT UsuarioId, PasswordHash, Rol FROM Usuarios WHERE Email = ?";
     $stmt = $conexion->prepare($query);
@@ -43,11 +48,15 @@ try {
     // Manejar la excepción y proporcionar un mensaje de error personalizado
     $response['status'] = 'error';
     $response['message'] = 'Error al autenticar: ' . $e->getMessage();
+} finally {
+    // Cerrar la conexión
+    if (isset($stmt)) {
+        $stmt->close();
+    }
+    if (isset($conexion)) {
+        $conexion->close();
+    }
 }
-
-// Cerrar la conexión
-$stmt->close();
-$conexion->close();
 
 // Devolver la respuesta en formato JSON
 header('Content-Type: application/json');

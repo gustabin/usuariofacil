@@ -5,15 +5,23 @@ require '../../tools/config.php';
 // Conexión a la base de datos
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
+// Array para la respuesta JSON
+$response = array('success' => false);
+
 try {
+    // Validar la presencia y el tipo del parámetro contactoID
+    if (!isset($_GET['contactoID']) || !is_numeric($_GET['contactoID'])) {
+        throw new Exception("Parámetro 'contactoID' no válido");
+    }
+
+    // Sanitizar el parámetro contactoID
+    $contactoID = (int)$_GET['contactoID'];
+
     // Obtener el token CSRF enviado
     $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
 
     // Verificar si el token CSRF enviado es válido
     if (!empty($_SESSION['csrf_token']) && !empty($token) && hash_equals($_SESSION['csrf_token'], $token)) {
-        // Obtener el ID del contacto desde la consulta GET
-        $contactoID = $_GET['contactoID'];
-
         // Consulta SQL para eliminar el contacto
         $query = "DELETE FROM contactos WHERE id = ?";
 
@@ -29,9 +37,7 @@ try {
 
             // Verificar si la eliminación fue exitosa
             if ($stmt->affected_rows > 0) {
-                echo json_encode(array('success' => true));
-            } else {
-                echo json_encode(array('success' => false));
+                $response['success'] = true;
             }
 
             // Cerrar el statement
@@ -39,13 +45,18 @@ try {
         } else {
             throw new Exception("Error al preparar la consulta");
         }
+
         unset($_SESSION['csrf_token']);
     } else {
         throw new Exception("Token CSRF no válido");
     }
 } catch (Exception $e) {
-    echo json_encode(array('error' => $e->getMessage()));
+    $response['error'] = $e->getMessage();
 }
 
 // Cierra la conexión
 $conexion->close();
+
+// Devolver la respuesta en formato JSON
+header('Content-Type: application/json');
+echo json_encode($response);

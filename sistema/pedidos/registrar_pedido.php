@@ -1,55 +1,86 @@
 <?php
 // Incluir el archivo de configuración
 require '../../tools/config.php';
+
 // Conexión a la base de datos
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // Variables de entrada
-$producto = $_POST['producto'];
-$cantidad = intval($_POST['cantidad']);
+session_start();
+$usuarioID = $_SESSION['usuarioID'];
+$nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_SPECIAL_CHARS);
+$apellido = filter_input(INPUT_POST, 'apellido', FILTER_SANITIZE_SPECIAL_CHARS);
 
-// Array para la respuesta JSON
 $response = array();
 
-try {
-    // Validar datos del pedido
-    if (empty($producto) || $cantidad <= 0) {
-        throw new Exception('Datos de pedido no válidos.');
+// Inicializar la variable $response['avatarURL']
+$response['avatarURL'] = null;
+
+// Verificar si se ha proporcionado un archivo
+if (isset($_FILES['avatarURL']) && $_FILES['avatarURL']['error'] === UPLOAD_ERR_OK) {
+    $nombreArchivo = $usuarioID . '_' . $_FILES['avatarURL']['name'];
+    $rutaTemporal = $_FILES['avatarURL']['tmp_name'];
+
+    // Verificar y mover el archivo a la ubicación deseada en el servidor
+    $directorioAlmacenamiento = "imagen/";
+    $rutaAlmacenamiento = $directorioAlmacenamiento . $nombreArchivo;
+
+    if (!file_exists($directorioAlmacenamiento) && !is_dir($directorioAlmacenamiento)) {
+        mkdir($directorioAlmacenamiento, 0777, true);
     }
 
-    session_start();
-    $usuarioID = $_SESSION['usuarioID'];
+    // Mover el archivo
+    if (move_uploaded_file($rutaTemporal, $rutaAlmacenamiento)) {
+        // Actualizar la URL del avatar en la base de datos
+        $updateQuery = "UPDATE Perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
+        $updateStmt = $conexion->prepare($updateQuery);
+        $updateStmt->bind_param('si', $rutaAlmacenamiento, $usuarioID);
+        $updateStmt->execute();
 
-    // Consulta preparada para insertar un nuevo pedido
-    $query = "INSERT INTO Pedidos (UsuarioID, Producto, Cantidad, FechaPedido) VALUES (?, ?, ?, CURRENT_DATE)";
-    $stmt = $conexion->prepare($query);
-
-    if (!$stmt) {
-        throw new Exception('Error en la preparación de la consulta: ' . $conexion->error);
+        // Verificar si la actualización del avatar fue exitosa
+        if ($updateStmt->affected_rows > 0) {
+            $response['avatarURL'] = $rutaAlmacenamiento;
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'Error al actualizar el avatar para el ID ' . $usuarioID;
+            echo json_encode($response);
+            exit;
+        }
+        // Cerrar la conexión para liberar recursos
+        $updateStmt->close();
     }
+}
 
-    $stmt->bind_param('iss', $usuarioID, $producto, $cantidad);
+// Consulta preparada para actualizar el perfil de un usuario
+$query = "UPDATE Perfiles SET Nombre = ?, Apellido = ? WHERE UsuarioID = ?";
+$stmt = $conexion->prepare($query);
+$stmt->bind_param('ssi', $nombre, $apellido, $usuarioID);
+
+// Verificar si hay algún error en la preparación de la consulta
+if (!$stmt) {
+    $response['status'] = 'error';
+    $response['message'] = 'Error en la preparación de la consulta: ' . $conexion->error;
+} else {
+    // Ejecutar la actualización del perfil
     $stmt->execute();
 
     // Verificar si la operación fue exitosa
     if ($stmt->affected_rows > 0) {
-        // Éxito al insertar el pedido
         $response['status'] = 'exito';
-        $response['message'] = 'Pedido realizado correctamente.';
+        $response['nombre'] = $nombre;
+        $response['apellido'] = $apellido;
     } else {
-        // Error al insertar el pedido
-        throw new Exception('Error al realizar el pedido: No se realizaron cambios.');
+        $response['status'] = 'error';
+        $response['message'] = 'Error al actualizar el perfil para el ID ' . $usuarioID;
     }
-} catch (Exception $e) {
-    // Manejar la excepción y proporcionar un mensaje de error personalizado
-    $response['status'] = 'error';
-    $response['message'] = 'Error al realizar el pedido: ' . $e->getMessage();
+
+    // Cerrar la conexión
+    $stmt->close();
 }
 
-// Cerrar la conexión
-$stmt->close();
+// Cerrar la conexión principal
 $conexion->close();
 
-// Devolver la respuesta en formato JSON
+// Mostrar la respuesta en formato JSON
 header('Content-Type: application/json');
 echo json_encode($response);

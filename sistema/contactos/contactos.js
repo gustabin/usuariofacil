@@ -1,7 +1,7 @@
 $(document).ready(function () {
     // Obtener los datos de los contáctos mediante AJAX
     $.ajax({
-        url: 'contactos/obtenerContactos.php',
+        url: 'contactos/obtener_contactos.php',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -65,7 +65,7 @@ function eliminarContacto(contactoID) {
                     if (response.success) {
                         // Recargar la tabla después de la eliminación
                         $.ajax({
-                            url: 'contactos/obtenerContactos.php',
+                            url: 'contactos/obtener_contactos.php',
                             type: 'GET',
                             dataType: 'json',
                             success: function (data) {
