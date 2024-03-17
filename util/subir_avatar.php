@@ -42,7 +42,7 @@ $rutaAlmacenamiento = $directorioAlmacenamiento . $nombreArchivoUnico;
 // Mover el archivo a la ubicación deseada en el servidor
 if (move_uploaded_file($archivoSimulado['tmp_name'], $rutaAlmacenamiento)) {
     // Actualizar la URL del avatar en la base de datos
-    $updateQuery = "UPDATE Perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
+    $updateQuery = "UPDATE perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
     $updateStmt = $conexion->prepare($updateQuery);
     $updateStmt->bind_param('si', $rutaAlmacenamiento, $usuarioID);
     $updateStmt->execute();

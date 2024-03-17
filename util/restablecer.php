@@ -11,7 +11,7 @@ if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
     // Consultar la base de datos para encontrar un usuario con el token proporcionado
-    $query = "SELECT UsuarioID FROM Usuarios WHERE TokenRecuperacion = ? AND FechaRecuperacion > DATE_SUB(NOW(), INTERVAL 1 HOUR)";
+    $query = "SELECT UsuarioID FROM usuarios WHERE TokenRecuperacion = ? AND FechaRecuperacion > DATE_SUB(NOW(), INTERVAL 1 HOUR)";
     // Ejecutar la consulta (asegúrate de tener una conexión a la base de datos establecida)
     $stmt = $conexion->prepare($query);
     $stmt->bind_param("s", $token);

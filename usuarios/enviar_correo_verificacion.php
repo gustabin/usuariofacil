@@ -1,45 +1,55 @@
 <?php
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
-require '../PHPMailer/src/Exception.php';
-require '../PHPMailer/src/PHPMailer.php';
-require '../PHPMailer/src/SMTP.php';
-
 // Incluir el archivo de configuración
 require '../tools/config.php';
+require('../mail/index.php'); // Requerir el archivo de envío de correo
 
-function enviarCorreoVerificacion($email, $token)
-{
-    $mail = new PHPMailer(true);
+// Generar un número aleatorio para el código
+$numeroAleatorio = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
-    $mail->SMTPDebug = 0;
-    $mail->isSMTP();
-    $mail->Host       = getenv('SMTP_HOST');
-    $mail->SMTPAuth   = 'true';
-    $mail->Username   = getenv('SMTP_USERNAME');
-    $mail->Password   = getenv('SMTP_PASSWORD');
-    $mail->SMTPSecure = 'ssl';
-    $mail->Port       = getenv('SMTP_PORT');
+$reply = "gustabin@yahoo.com"; // Dirección de correo electrónico para respuestas
 
-    $mail->setFrom('stackcodelab@gmail.com', 'Soporte Stackcodelab');
-    $mail->addAddress($email);
-    $mail->CharSet = 'UTF-8';
-
-    //Contenido
-    $mail->isHTML(true);
-    $mail->Subject = 'Activar su cuenta';
-    $mail->Body    = "Hola,\n\nPara activar su cuenta haga click en el enlace. " .
-        "http://tudominio.com/usuariofacil/usuarios/activacion.php?token=$token\n\n" .
-        "El equipo de Usuariofacil.";
-
-    try {
-        // Envío del correo de verificación
-        $mail->send();
-        echo 'El correo electrónico de verificación ha sido enviado. Por favor, verifica tu dirección de correo electrónico antes de iniciar sesión.';
-    } catch (Exception $e) {
-        echo "Error al enviar el correo electrónico de verificación: {$mail->ErrorInfo}";
-    }
+if (!isset($_POST['email'])) {
+        throw new Exception('Por favor, proporciona un correo electrónico y una contraseña.');
 }
+
+$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+$token = $_POST['token'];
+
+// Array para la respuesta JSON
+$response = array();
+// Enviar email al administrador
+$subject = "Activar su cuenta - Cod: $numeroAleatorio";
+$body = "<h2>Hola,</h2><br><br>
+        Un usuario registro una cuenta en usuariofacil <br><br>
+        Su email es $email <br><br>
+        <a href='https://stackcodelab.com/usuariofacil/usuarios/activacion.php?token=$token'>Activar cuenta</a><br><br>
+        El equipo de usuariofacil.<br>
+        <img src=http://www.gustabin.com/img/logoEmpresa.png height=50px width=50px />
+        <a href=https://www.facebook.com/gustabin2.0>
+        <img src=http://www.gustabin.com/img/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
+        <h5>Desarrollado por Gustabin<br>
+        Copyright © 2024. Todos los derechos reservados. Version 1.0.0 <br></h5>
+        ";
+enviarEmail("gustabin@yahoo.com", $subject, $body, $reply);
+
+// Enviar email al usuario
+$subject = "Activar su cuenta - Cod: $numeroAleatorio";
+$body = "<h2>Hola,</h2><br><br>
+        Bienvenido a nuestro sistema usuario facil!.
+        Para activar su cuenta, haga clic en el siguiente enlace: <br><br>
+        <a href='https://stackcodelab.com/usuariofacil/usuarios/activacion.php?token=$token'>Activar cuenta</a><br><br>
+        El equipo de usuariofacil.<br>
+        <img src=http://www.gustabin.com/img/logoEmpresa.png height=50px width=50px />
+        <a href=https://www.facebook.com/gustabin2.0>
+        <img src=http://www.gustabin.com/img/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
+        <h5>Desarrollado por Gustabin<br>
+        Copyright © 2024. Todos los derechos reservados. Version 1.0.0 <br></h5>
+        ";
+
+enviarEmail($email, $subject, $body, $reply);
+// Preparar la respuesta exitosa
+$response['status'] = 'exito';
+
+// Devolver la respuesta en formato JSON
+header('Content-Type: application/json');
+echo json_encode($response);

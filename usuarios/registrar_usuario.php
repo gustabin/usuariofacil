@@ -7,6 +7,10 @@ $response = array();
 
 try {
     // Validación de datos del formulario
+    if (!isset($_POST['email'], $_POST['password'])) {
+        throw new Exception('Por favor, proporciona un correo electrónico y una contraseña.');
+    }
+
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
     $password = $_POST['password'];
 
@@ -15,7 +19,7 @@ try {
     }
 
     // Consulta preparada para insertar un nuevo usuario
-    $query = "INSERT INTO Usuarios (Email, PasswordHash, TokenRecuperacion) VALUES (?, ?, ?)";
+    $query = "INSERT INTO usuarios (Email, PasswordHash, TokenRecuperacion) VALUES (?, ?, ?)";
     $stmt = $conexion->prepare($query);
 
     if (!$stmt) {
@@ -54,16 +58,53 @@ try {
     $stmtPerfil->close();
 
     if ($stmt->affected_rows > 0) {
+        require('../mail/index.php'); // Requerir el archivo de envío de correo
+
+        // Generar un número aleatorio para el código
+        $numeroAleatorio = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $reply = "gustabin@yahoo.com"; // Dirección de correo electrónico para respuestas
+
+        // Enviar email al administrador
+        $subject = "Activar su cuenta - Cod: $numeroAleatorio";
+        $body = "<h2>Hola,</h2><br><br>
+        Un usuario registro una cuenta en usuariofacil <br><br>
+        Su email es $email <br><br>
+        <a href='https://stackcodelab.com/usuariofacil/usuarios/activacion.php?token=$token'>Activar cuenta</a><br><br>
+        El equipo de usuariofacil.<br>
+        <img src=http://www.gustabin.com/img/logoEmpresa.png height=50px width=50px />
+        <a href=https://www.facebook.com/gustabin2.0>
+        <img src=http://www.gustabin.com/img/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
+        <h5>Desarrollado por Gustabin<br>
+        Copyright © 2024. Todos los derechos reservados. Version 1.0.0 <br></h5>
+        ";
+        enviarEmail("gustabin@yahoo.com", $subject, $body, $reply);
+
+        // Enviar email al usuario
+        $subject = "Activar su cuenta - Cod: $numeroAleatorio";
+        $body = "<h2>Hola,</h2><br><br>
+        Bienvenido a nuestro sistema usuario facil!.
+        Para activar su cuenta, haga clic en el siguiente enlace: <br><br>
+        <a href='https://stackcodelab.com/usuariofacil/usuarios/activacion.php?token=$token'>Activar cuenta</a><br><br>
+        El equipo de usuariofacil.<br>
+        <img src=http://www.gustabin.com/img/logoEmpresa.png height=50px width=50px />
+        <a href=https://www.facebook.com/gustabin2.0>
+        <img src=http://www.gustabin.com/img/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
+        <h5>Desarrollado por Gustabin<br>
+        Copyright © 2024. Todos los derechos reservados. Version 1.0.0 <br></h5>
+        ";
+
+        enviarEmail($email, $subject, $body, $reply);
+        // Preparar la respuesta exitosa
         $response['status'] = 'exito';
         $response['message'] = 'Usuario registrado correctamente';
-        // También puedes enviar el correo de verificación aquí si es necesario
     } else {
         throw new Exception('Error al registrar el usuario: No se realizaron cambios.');
     }
 } catch (Exception $e) {
     error_log("Error al registrar el usuario: " . $e->getMessage());
     $response['status'] = 'error';
-    $response['message'] = 'Error al registrar el usuario. Por favor, inténtalo de nuevo más tarde.';
+    $response['message'] = 'Error al registrar el usuario. Ese correo ya se encuentra registrado.';
 }
 
 $stmt->close();

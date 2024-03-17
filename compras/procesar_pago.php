@@ -74,7 +74,7 @@ function calcularTotalPagar($productos)
                 throw new Exception("Cantidad negativa en los detalles del producto.");
             }
 
-            $queryPrecio = "SELECT Precio FROM Productos WHERE ProductoID = ?";
+            $queryPrecio = "SELECT Precio FROM productos WHERE ProductoID = ?";
             $stmtPrecio = $conexion->prepare($queryPrecio);
             $stmtPrecio->bind_param('i', $productoID);
             $stmtPrecio->execute();
@@ -119,14 +119,14 @@ function guardarPedidoEnBaseDeDatos($productos, $totalPagar, $usuarioID)
     try {
         $conexion->begin_transaction();
 
-        $queryPedido = "INSERT INTO Pedidos (UsuarioID, FechaPedido) VALUES (?, NOW())";
+        $queryPedido = "INSERT INTO pedidos (UsuarioID, FechaPedido) VALUES (?, NOW())";
         $stmtPedido = $conexion->prepare($queryPedido);
         $stmtPedido->bind_param('i', $usuarioID);
         $stmtPedido->execute();
 
         $pedidoId = $stmtPedido->insert_id;
 
-        $queryProductosPedidos = "INSERT INTO ProductosPedidos (PedidoID, ProductoID, Cantidad) VALUES (?, ?, ?)";
+        $queryProductosPedidos = "INSERT INTO productospedidos (PedidoID, ProductoID, Cantidad) VALUES (?, ?, ?)";
         $stmtProductosPedidos = $conexion->prepare($queryProductosPedidos);
 
         foreach ($productos as $productoDetalle) {
@@ -137,7 +137,7 @@ function guardarPedidoEnBaseDeDatos($productos, $totalPagar, $usuarioID)
             $stmtProductosPedidos->execute();
         }
 
-        $queryPagos = "INSERT INTO Pagos (UsuarioID, Monto, Pagado) VALUES (?, ?, false)";
+        $queryPagos = "INSERT INTO pagos (UsuarioID, Monto, Pagado) VALUES (?, ?, false)";
         $stmtPagos = $conexion->prepare($queryPagos);
         $stmtPagos->bind_param('id', $usuarioID, $totalPagar);
         $stmtPagos->execute();

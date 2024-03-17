@@ -19,7 +19,7 @@ try {
     }
 
     // Consulta preparada para obtener el perfil de un usuario
-    $query = "SELECT * FROM Perfiles WHERE UsuarioID = ?";
+    $query = "SELECT * FROM perfiles WHERE UsuarioID = ?";
     $stmt = $conexion->prepare($query);
 
     if ($stmt) {

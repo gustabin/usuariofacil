@@ -51,12 +51,11 @@ $(document).ready(function () {
         // Supongamos que tienes el valor de 'verificado' en una variable llamada verificadoValue
         var verificadoValue = userData.Verificado;
 
-
         // Configurar el estado del radio button según 'verificadoValue'
         var $verificadoSi = $('#verificadoSi');
         var $verificadoNo = $('#verificadoNo');
 
-        if (verificadoValue === '1') {
+        if (verificadoValue === 1) {
             $verificadoSi.prop('checked', true);
         } else {
             $verificadoNo.prop('checked', true);

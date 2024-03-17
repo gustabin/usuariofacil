@@ -5,43 +5,49 @@ require '../../tools/config.php';
 // Conexión a la base de datos (usando MySQLi)
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
-if (isset($_POST['usuarioID'], $_POST['email'], $_POST['verificado'], $_POST['rol'])) {
-    $usuarioID = $_POST['usuarioID'];
-    $email = $_POST['email'];
-    $verificado = $_POST['verificado'];
-    $rol = $_POST['rol'];
-    // Resto del código...
-} else {
-    // Manejar el caso en que algunas variables no estén definidas
-    $response['status'] = 'error';
-    $response['message'] = 'Faltan datos requeridos';
-    echo json_encode($response);
-    exit;
-}
-
 // Array para la respuesta JSON
 $response = array();
 
 try {
-    // Consulta preparada para actualizar un usuario
-    $query = "UPDATE Usuarios SET Email = ?, Verificado = ?, Rol = ? WHERE UsuarioID = ?";
-    $stmt = $conexion->prepare($query);
+    // Verificar si todas las variables necesarias están definidas
+    if (isset($_POST['usuarioID'], $_POST['email'], $_POST['verificado'], $_POST['rol'])) {
+        // Obtener y validar los datos del formulario
+        $usuarioID = intval($_POST['usuarioID']);
+        $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+        $verificado = intval($_POST['verificado']);
+        $rol = intval($_POST['rol']);
 
-    if (!$stmt) {
-        throw new Exception('Error en la preparación de la consulta: ' . $conexion->error);
-    }
+        // Verificar la validez del correo electrónico
+        if (!$email) {
+            throw new Exception('El correo electrónico proporcionado no es válido');
+        }
 
-    $stmt->bind_param('siii', $email, $verificado, $rol, $usuarioID);
-    $stmt->execute();
+        // Consulta preparada para actualizar un usuario
+        $query = "UPDATE usuarios SET Email = ?, Verificado = ?, Rol = ? WHERE UsuarioID = ?";
+        $stmt = $conexion->prepare($query);
 
-    // Verificar si la operación fue exitosa
-    if ($stmt->affected_rows > 0) {
-        // Éxito al actualizar el usuario
-        $response['status'] = 'exito';
-        $response['message'] = 'Usuario actualizado correctamente';
+        if (!$stmt) {
+            throw new Exception('Error en la preparación de la consulta: ' . $conexion->error);
+        }
+
+        $stmt->bind_param('siii', $email, $verificado, $rol, $usuarioID);
+        $stmt->execute();
+
+        // Verificar si la operación fue exitosa
+        if ($stmt->affected_rows > 0) {
+            // Éxito al actualizar el usuario
+            $response['status'] = 'exito';
+            $response['message'] = 'Usuario actualizado correctamente';
+        } else {
+            // Error al actualizar el usuario
+            throw new Exception('Error al actualizar el usuario: No se realizaron cambios.');
+        }
+
+        // Cerrar la consulta preparada
+        $stmt->close();
     } else {
-        // Error al actualizar el usuario
-        throw new Exception('Error al actualizar el usuario: No se realizaron cambios.');
+        // Manejar el caso en que algunas variables no estén definidas
+        throw new Exception('Faltan datos requeridos');
     }
 } catch (Exception $e) {
     // Manejar la excepción y proporcionar un mensaje de error personalizado
@@ -52,7 +58,6 @@ try {
 }
 
 // Cerrar la conexión
-$stmt->close();
 $conexion->close();
 
 // Devolver la respuesta en formato JSON

@@ -14,7 +14,7 @@ $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 try {
     // Obtener la URL del avatar actual en la base de datos
-    $selectQuery = "SELECT AvatarURL FROM Perfiles WHERE UsuarioID = ?";
+    $selectQuery = "SELECT AvatarURL FROM perfiles WHERE UsuarioID = ?";
     $selectStmt = $conexion->prepare($selectQuery);
     $selectStmt->bind_param('i', $usuarioID);
     $selectStmt->execute();
@@ -31,7 +31,7 @@ try {
             unlink($avatarURL);
 
             // Actualizar la URL del avatar en la base de datos
-            $updateQuery = "UPDATE Perfiles SET AvatarURL = NULL WHERE UsuarioID = ?";
+            $updateQuery = "UPDATE  perfiles SET AvatarURL = NULL WHERE UsuarioID = ?";
             $updateStmt = $conexion->prepare($updateQuery);
             $updateStmt->bind_param('i', $usuarioID);
             $updateStmt->execute();

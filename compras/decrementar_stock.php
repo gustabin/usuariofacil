@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $cantidad = intval($productoDetalle['cantidad']);
 
                     // Actualizar el stock en la base de datos
-                    $queryUpdateStock = "UPDATE Productos SET Stock = Stock - ? WHERE ProductoID = ?";
+                    $queryUpdateStock = "UPDATE productos SET Stock = Stock - ? WHERE ProductoID = ?";
                     $stmtUpdateStock = $conexion->prepare($queryUpdateStock);
                     $stmtUpdateStock->bind_param('ii', $cantidad, $productoID);
                     $stmtUpdateStock->execute();

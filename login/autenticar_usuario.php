@@ -19,12 +19,18 @@ try {
     $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
     // Consulta preparada para obtener el hash de la contraseña del usuario
-    $query = "SELECT UsuarioId, PasswordHash, Rol FROM Usuarios WHERE Email = ?";
+    $query = "SELECT UsuarioId, PasswordHash, Rol, Verificado FROM usuarios WHERE Email = ?";
     $stmt = $conexion->prepare($query);
     $stmt->bind_param('s', $email);
     $stmt->execute();
-    $stmt->bind_result($usuarioID, $hashAlmacenado, $rol);
+    $stmt->bind_result($usuarioID, $hashAlmacenado, $rol, $verificado);
     $stmt->fetch();
+
+    // Verificar si el usuario está verificado
+    if ($verificado == 0) {
+        // La cuenta no está activada
+        throw new Exception('Tu cuenta no está activada. Por favor, revisa tu correo electrónico para activarla.');
+    }
 
     // Verificar la contraseña usando password_verify
     if (password_verify($password, $hashAlmacenado)) {
@@ -36,6 +42,7 @@ try {
         $_SESSION['intentar_pago'] = false;
         $_SESSION['usuarioID'] = $usuarioID;
         $_SESSION['rol'] = $rol;
+        $_SESSION['verificado'] = $verificado;
         $response['status'] = 'exito';
         $response['message'] = 'Inicio de sesión exitoso';
         $response['intentar_pago'] = $intentarPago;

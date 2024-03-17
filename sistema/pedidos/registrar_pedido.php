@@ -32,7 +32,7 @@ if (isset($_FILES['avatarURL']) && $_FILES['avatarURL']['error'] === UPLOAD_ERR_
     // Mover el archivo
     if (move_uploaded_file($rutaTemporal, $rutaAlmacenamiento)) {
         // Actualizar la URL del avatar en la base de datos
-        $updateQuery = "UPDATE Perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
+        $updateQuery = "UPDATE perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
         $updateStmt = $conexion->prepare($updateQuery);
         $updateStmt->bind_param('si', $rutaAlmacenamiento, $usuarioID);
         $updateStmt->execute();

@@ -2,8 +2,11 @@
 // Incluir el archivo de configuración
 require '../../tools/config.php';
 
+// Array para la respuesta JSON
+$response = array();
+
 try {
-    // Conexión a la base de datos
+    // Conexión a la base de datos (usando MySQLi)
     $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
     // Verificar errores de conexión
@@ -11,6 +14,7 @@ try {
         throw new Exception("Error de conexión: " . $conexion->connect_error);
     }
 
+    // Consulta SQL para obtener los datos de usuarios con sus roles
     $query = "SELECT UsuarioID, Email, rol FROM usuarios";
 
     // Ejecutar la consulta
@@ -23,16 +27,22 @@ try {
 
     $usuarios = [];
 
-    // Obtener datos
+    // Obtener datos de usuarios y sus roles
     while ($row = $result->fetch_assoc()) {
-        $usuarios[] = $row;
+        // Añadir los datos al array de usuarios
+        $usuarios[] = [
+            'UsuarioID' => $row['UsuarioID'],
+            'Email' => $row['Email'],
+            'rol' => $row['rol']
+        ];
     }
 
     // Enviar datos en formato JSON para DataTable
     echo json_encode(['data' => $usuarios]);
 } catch (Exception $e) {
     // Capturar y manejar cualquier excepción
-    echo json_encode(['error' => $e->getMessage()]);
+    $response['error'] = $e->getMessage();
+    echo json_encode($response);
 } finally {
     // Cerrar la conexión de todas formas
     if (isset($conexion)) {

@@ -19,7 +19,7 @@ try {
         throw new Exception("ID de usuario no válido.");
     }
 
-    $query = "SELECT * FROM Pedidos WHERE UsuarioID = ?";
+    $query = "SELECT * FROM pedidos WHERE UsuarioID = ?";
 
     // Preparar la consulta
     $stmt = $conexion->prepare($query);

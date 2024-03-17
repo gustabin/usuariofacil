@@ -18,8 +18,8 @@ try {
 
     // Consulta SQL para obtener detalles del pedido con información del producto
     $query = "SELECT pp.Cantidad, p.Nombre AS NombreProducto, p.Descripcion AS DescProducto, p.Precio, p.ImagenURL
-        FROM ProductosPedidos pp
-        JOIN Productos p ON pp.ProductoID = p.ProductoID
+        FROM productospedidos pp
+        JOIN productos p ON pp.ProductoID = p.ProductoID
         WHERE pp.PedidoID = ?";
 
     // Preparar la consulta

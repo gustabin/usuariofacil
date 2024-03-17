@@ -15,7 +15,7 @@ if ($usuarioID === false || $usuarioID <= 0) {
 }
 
 // Consulta preparada para marcar un usuario como verificado
-$query = "UPDATE Usuarios SET Verificado = true WHERE UsuarioID = ?";
+$query = "UPDATE usuarios SET Verificado = true WHERE UsuarioID = ?";
 $stmt = $conexion->prepare($query);
 
 if (!$stmt) {

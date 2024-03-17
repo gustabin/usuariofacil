@@ -12,6 +12,10 @@ $(document).ready(function () {
                 // Muestra el Sweet Alert según la respuesta del microservicio
                 if (response.status === 'exito') {
                     Swal.fire('Éxito', response.message, 'success');
+                    // Redirigir a la página de login después de 3 segundos
+                    setTimeout(function () {
+                        window.location.href = '../login/index.html';
+                    }, 3000); // 3000 milisegundos = 3 segundos
                 } else {
                     Swal.fire('Error', response.message, 'error');
                 }

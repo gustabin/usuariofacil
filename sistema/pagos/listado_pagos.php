@@ -13,7 +13,7 @@ if ($conexion->connect_error) {
 } else {
     try {
         // Consulta preparada para obtener los pagos
-        $query = "SELECT PagoID, UsuarioID, Monto, Pagado FROM Pagos";
+        $query = "SELECT PagoID, UsuarioID, Monto, Pagado FROM pagos";
         $stmt = $conexion->prepare($query);
 
         if ($stmt) {

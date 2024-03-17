@@ -59,7 +59,7 @@ function obtenerproductos()
     $productos = array();
 
     // Consulta para obtener los productos
-    $sql = 'SELECT * FROM Productos'; // Ajusta la tabla según tu esquema de base de datos
+    $sql = 'SELECT * FROM productos'; // Ajusta la tabla según tu esquema de base de datos
     $stmt = $conexion->prepare($sql);
 
     // Ejecuta la consulta

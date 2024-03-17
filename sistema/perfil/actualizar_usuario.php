@@ -33,7 +33,7 @@ try {
         // Mover el archivo
         if (move_uploaded_file($rutaTemporal, $rutaAlmacenamiento)) {
             // Actualizar la URL del avatar en la base de datos
-            $updateQuery = "UPDATE Perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
+            $updateQuery = "UPDATE perfiles SET AvatarURL = ? WHERE UsuarioID = ?";
             $updateStmt = $conexion->prepare($updateQuery);
 
             if (!$updateStmt) {
@@ -62,7 +62,7 @@ try {
 }
 
 // Consulta preparada para actualizar el perfil de un usuario
-$query = "UPDATE Perfiles SET Nombre = ?, Apellido = ? WHERE UsuarioID = ?";
+$query = "UPDATE perfiles SET Nombre = ?, Apellido = ? WHERE UsuarioID = ?";
 $stmt = $conexion->prepare($query);
 
 // Verificar si hay algún error en la preparación de la consulta

@@ -50,14 +50,6 @@ if ($_SESSION['rol'] == 1) {
 // Función ficticia para obtener usuarios (debes implementarla según tu lógica)
 function obtenerUsuarios()
 {
-    // Aquí deberías recuperar tus registros de usuarios desde tu base de datos u otra fuente de datos
-    // y devolverlos como un array
-    // return array(
-    //     array('id' => 1, 'email' => 'usuario1@example.com', 'verificado' => 1),
-    //     array('id' => 2, 'email' => 'usuario2@example.com', 'verificado' => 0),
-    //     // ... otros usuarios
-    // );
-    // Incluir el archivo de configuración
     require '../tools/config.php';
 
     // Conexión a la base de datos
@@ -68,7 +60,7 @@ function obtenerUsuarios()
     $usuarios = array();
 
     // Consulta para obtener los usuarios
-    $sql = 'SELECT * FROM Usuarios'; // Ajusta la tabla según tu esquema de base de datos
+    $sql = 'SELECT * FROM usuarios'; // Ajusta la tabla según tu esquema de base de datos
     $stmt = $conexion->prepare($sql);
 
     // Ejecuta la consulta

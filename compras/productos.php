@@ -11,7 +11,7 @@ $productos = array();
 
 try {
     // Consulta para obtener los productos
-    $sql = 'SELECT * FROM Productos';
+    $sql = 'SELECT * FROM productos';
     $stmt = $conexion->prepare($sql);
 
     if (!$stmt) {

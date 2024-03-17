@@ -23,7 +23,7 @@ if (isset($_POST['csrf_token']) && hash_equals($_SESSION['csrf_token'], $_POST['
         }
 
         // Consulta preparada para insertar un nuevo contacto
-        $query = "INSERT INTO Contactos (Nombre, Email, Telefono, Mensaje, Fecha) VALUES (?, ?, ?, ?, NOW())";
+        $query = "INSERT INTO contactos (Nombre, Email, Telefono, Mensaje, Fecha) VALUES (?, ?, ?, ?, NOW())";
         $stmt = $conexion->prepare($query);
 
         if (!$stmt) {

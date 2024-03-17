@@ -16,7 +16,7 @@ try {
     session_start();
     $usuarioID = $_SESSION['usuarioID'];
 
-    $query = "INSERT INTO Pagos (UsuarioID, Producto, Monto) VALUES (?, ?, ?)";
+    $query = "INSERT INTO pagos (UsuarioID, Producto, Monto) VALUES (?, ?, ?)";
     $stmt = $conexion->prepare($query);
 
     if (!$stmt) {

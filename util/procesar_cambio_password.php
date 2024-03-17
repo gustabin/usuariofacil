@@ -15,7 +15,7 @@ $nuevaContraseña = password_hash($_POST['nuevaContraseña'], PASSWORD_DEFAULT);
 // $nuevaContraseña = password_hash("0987654321", PASSWORD_DEFAULT);
 
 // Verificar la validez del token y la fecha de solicitud
-$query = "SELECT UsuarioID FROM Usuarios WHERE TokenRecuperacion = ? AND FechaRecuperacion > DATE_SUB(NOW(), INTERVAL 1 HOUR)";
+$query = "SELECT UsuarioID FROM usuarios WHERE TokenRecuperacion = ? AND FechaRecuperacion > DATE_SUB(NOW(), INTERVAL 1 HOUR)";
 $stmt = $conexion->prepare($query);
 $stmt->bind_param('s', $token);
 $stmt->execute();
@@ -31,7 +31,7 @@ if ($stmt->num_rows > 0) {
         $stmt->bind_result($usuarioID);
         $stmt->fetch();
 
-        $updateQuery = "UPDATE Usuarios SET PasswordHash = ?, TokenRecuperacion = NULL, FechaRecuperacion = NULL WHERE UsuarioID = ?";
+        $updateQuery = "UPDATE usuarios SET PasswordHash = ?, TokenRecuperacion = NULL, FechaRecuperacion = NULL WHERE UsuarioID = ?";
         $updateStmt = $conexion->prepare($updateQuery);
         $updateStmt->bind_param('si', $nuevaContraseña, $usuarioID);
         $updateStmt->execute();

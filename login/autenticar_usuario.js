@@ -86,6 +86,51 @@ $(document).ready(function () {
         });
     });
 
+    $('#cambiarPasswordForm').submit(function (event) {
+        event.preventDefault();
+
+        // Obtener los datos del formulario
+        var formData = {
+            password: $('#password').val(),
+            retipearPassword: $('#retipearPassword').val(),
+            token: $('#token').val()
+        };
+
+        // Enviar la solicitud Ajax
+        $.ajax({
+            type: 'POST',
+            url: 'cambiar_password.php',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                // Mostrar SweetAlert según el status de la respuesta
+                if (response.status === 'exito') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: response.message,
+                    });
+                    // Redirigir a la página de login
+                    window.location.href = 'index.html';
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message,
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                // Mostrar SweetAlert en caso de error en la solicitud Ajax
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error en la solicitud Ajax: ' + error,
+                });
+            }
+        });
+    });
+
     $("#recuperarPassword").click(function () {
         // Redirigir a la página de restablecer contraseña
         window.location.href = 'reestablecer_password.html';
@@ -101,7 +146,4 @@ $(document).ready(function () {
         // Redirigir a la página de login
         window.location.href = 'index.html';
     });
-
-
-
 });

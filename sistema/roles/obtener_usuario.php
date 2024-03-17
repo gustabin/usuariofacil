@@ -2,8 +2,11 @@
 // Incluir el archivo de configuración
 require '../../tools/config.php';
 
+// Array para la respuesta JSON
+$response = array();
+
 try {
-    // Conexión a la base de datos
+    // Conexión a la base de datos (usando MySQLi)
     $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
     // Verificar errores de conexión
@@ -12,33 +15,46 @@ try {
     }
 
     // Verificar si se proporciona un ID en la solicitud GET
-    if (isset($_GET['id'])) {
-        // Obtener el ID del usuario desde la solicitud
-        $idUsuario = $_GET['id'];
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        // Obtener el ID del usuario desde la solicitud y validar que sea un número entero
+        $idUsuario = intval($_GET['id']);
 
-        // Consultar datos específicos del usuario por su ID
-        $query = "SELECT * FROM usuarios WHERE UsuarioID = $idUsuario";
+        // Consulta preparada para obtener datos específicos del usuario por su ID
+        $query = "SELECT * FROM usuarios WHERE UsuarioID = ?";
+        $stmt = $conexion->prepare($query);
 
-        // Ejecutar la consulta
-        $result = $conexion->query($query);
-
-        // Verificar errores en la consulta
-        if (!$result) {
-            throw new Exception("Error en la consulta: " . $conexion->error);
+        if (!$stmt) {
+            throw new Exception("Error en la preparación de la consulta: " . $conexion->error);
         }
 
-        // Obtener datos del usuario específico
-        $usuario = $result->fetch_assoc();
+        $stmt->bind_param('i', $idUsuario);
+        $stmt->execute();
 
-        // Enviar datos en formato JSON
-        echo json_encode($usuario);
+        // Obtener el resultado de la consulta
+        $result = $stmt->get_result();
+
+        // Verificar si se encontró algún usuario
+        if ($result->num_rows > 0) {
+            // Obtener datos del usuario específico
+            $usuario = $result->fetch_assoc();
+
+            // Enviar datos en formato JSON
+            echo json_encode($usuario);
+        } else {
+            // Si no se encontró ningún usuario con el ID proporcionado, devolver un mensaje de error
+            throw new Exception("No se encontró ningún usuario con el ID proporcionado.");
+        }
+
+        // Cerrar la consulta preparada
+        $stmt->close();
     } else {
-        // Si no se proporciona un ID, devolver un error
-        throw new Exception("No se proporcionó un ID de usuario.");
+        // Si no se proporciona un ID de usuario válido, devolver un mensaje de error
+        throw new Exception("No se proporcionó un ID de usuario válido.");
     }
 } catch (Exception $e) {
     // Capturar y manejar cualquier excepción
-    echo json_encode(['error' => $e->getMessage()]);
+    $response['error'] = $e->getMessage();
+    echo json_encode($response);
 } finally {
     // Cerrar la conexión de todas formas
     if (isset($conexion)) {
