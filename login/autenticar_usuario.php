@@ -9,6 +9,16 @@ $password = isset($_POST['password']) ? $_POST['password'] : null;
 // Array para la respuesta JSON
 $response = array();
 
+function jwt_encode($payload, $secret)
+{
+    $header = json_encode(array('typ' => 'JWT', 'alg' => 'HS256'));
+    $header = base64_encode($header);
+    $payload = base64_encode(json_encode($payload));
+    $signature = hash_hmac('sha256', "$header.$payload", $secret, true);
+    $signature = base64_encode($signature);
+    return "$header.$payload.$signature";
+}
+
 try {
     // Validar la entrada
     if (!$email || !$password) {
@@ -46,6 +56,20 @@ try {
         $response['status'] = 'exito';
         $response['message'] = 'Inicio de sesión exitoso';
         $response['intentar_pago'] = $intentarPago;
+
+        // Genera el token JWT 
+        $payload = array(
+            "usuarioID" => $usuarioID,
+            "email" => $email,
+            "exp" => time() + 3600 // Expira en una hora
+        );
+        $token = jwt_encode($payload, SECRET_KEY);
+
+        // Agregar el token JWT a la respuesta
+        $response['status'] = 'exito';
+        $response['message'] = 'Inicio de sesión exitoso';
+        $response['intentar_pago'] = $intentarPago;
+        $response['token'] = $token;
     } else {
         // La contraseña es incorrecta
         $response['status'] = 'error';

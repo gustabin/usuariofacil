@@ -22,33 +22,40 @@ $(document).ready(function () {
             apellido: apellido,
         };
 
-        // Petición AJAX al microservicio
+        const jwtToken = localStorage.getItem('jwt_token');
+
         $.ajax({
-            type: 'POST',
-            url: 'perfil/actualizar_usuario.php',
-            data: new FormData(this), // Use FormData to handle file uploads
-            contentType: false,
-            processData: false,
-            cache: false,
+            type: "POST",
+            url: "perfil/actualizar_usuario.php",
+            data: {
+                nombre: nombre,
+                apellido: apellido
+            },
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' + jwtToken
+            },
             success: function (response) {
                 // Mostrar mensaje con SweetAlert
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Perfil Actualizado',
-                    text: response.message
-                }).then(() => {
-                    // Cerrar la modal
-                    $('#myModal').modal('hide');
-                    // Refrescar los datos en la ventana principal
-                    $("#nombreSpan").text(response.nombre);
-                    $("#apellidoSpan").text(response.apellido);
-                    // Puedes agregar la actualización del avatar aquí si es necesario
-                    if (response.avatarURL) {
-                        $("#avatarSpan").attr("src", "perfil/" + response.avatarURL);
-                    }
-                    // Limpia el campo de archivo
-                    inputAvatar.val('');
-                });
+                if (response.status = 'exito') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Perfil Actualizado',
+                        text: response.message
+                    }).then(() => {
+                        // Cerrar la modal
+                        $('#myModal').modal('hide');
+                        // Refrescar los datos en la ventana principal
+                        $("#nombreSpan").text(response.nombre);
+                        $("#apellidoSpan").text(response.apellido);
+                        // Puedes agregar la actualización del avatar aquí si es necesario
+                        if (response.avatarURL) {
+                            $("#avatarSpan").attr("src", "perfil/" + response.avatarURL);
+                        }
+                        // Limpia el campo de archivo
+                        inputAvatar.val('');
+                    });
+                }
             },
             error: function () {
                 // Mostrar mensaje de error con SweetAlert

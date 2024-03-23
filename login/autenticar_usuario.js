@@ -14,6 +14,10 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (response) {
+                if (response.token) {
+                    // Almacena el token JWT en localStorage
+                    localStorage.setItem('jwt_token', response.token);
+                }
                 if (response.status === 'exito') {
                     Swal.fire({
                         icon: 'success',
