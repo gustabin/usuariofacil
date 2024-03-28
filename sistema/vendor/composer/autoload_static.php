@@ -4,22 +4,8 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4122fab64fdaa685d99ec27ddf114eb4
+class ComposerStaticInitea004e154228a3b885af4040442ed15d
 {
-    public static $prefixLengthsPsr4 = array (
-        'G' => 
-        array (
-            'Gustabin\\Sistema\\' => 17,
-        ),
-    );
-
-    public static $prefixDirsPsr4 = array (
-        'Gustabin\\Sistema\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
@@ -41,9 +27,7 @@ class ComposerStaticInit4122fab64fdaa685d99ec27ddf114eb4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4122fab64fdaa685d99ec27ddf114eb4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4122fab64fdaa685d99ec27ddf114eb4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4122fab64fdaa685d99ec27ddf114eb4::$classMap;
+            $loader->classMap = ComposerStaticInitea004e154228a3b885af4040442ed15d::$classMap;
 
         }, null, ClassLoader::class);
     }
