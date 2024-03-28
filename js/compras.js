@@ -149,6 +149,13 @@ function agregarAlCarrito(productoId) {
 
         // Actualizar la interfaz gráfica del producto afectado
         actualizarTarjetaProducto(producto);
+
+        // Mostrar mensaje de SweetAlert indicando que el producto fue agregado al carrito
+        Swal.fire({
+            icon: 'success',
+            title: '¡Producto agregado!',
+            text: `El producto "${producto.Nombre}" ha sido agregado al carrito.`,
+        });
     } else {
         Swal.fire({
             icon: 'error',
