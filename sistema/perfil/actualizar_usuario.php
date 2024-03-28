@@ -1,6 +1,8 @@
 <?php
 // Incluir el archivo de configuración
 require '../../tools/config.php';
+require '../../tools/jwt.php';
+require '../../tools/sed.php';
 
 // Conexión a la base de datos
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -35,27 +37,20 @@ if (isset($headers['Authorization'])) {
         $token = $tokenParts[1];
     }
 }
-// Función para validar el token JWT
-function jwt_decode($token, $secret)
-{
-    list($header, $payload, $signature) = explode('.', $token);
-    $data = "$header.$payload";
-    $raw_signature = base64_decode($signature);
-    $valid_signature = hash_hmac('sha256', $data, $secret, true);
-    if ($raw_signature !== $valid_signature) {
-        return false; // Firma no válida
-    }
-    $decoded = json_decode(base64_decode($payload), true);
-    $current_time = time();
-    if ($decoded['exp'] < $current_time) {
-        return false; // Token expirado
-    }
-    return $decoded;
-}
 
+//llamar a la funcion dentro de JWT
 $decoded_token = jwt_decode($token, SECRET_KEY);
 
 if ($decoded_token) {
+    $usuarioID_desencriptado = desencriptarUsuarioID($decoded_token['usuarioID'], SECRET_KEY);
+
+    // Verificar si el usuarioID coincide con el de la sesión
+    if ($usuarioID_desencriptado !== $_SESSION['usuarioID']) {
+        // El usuarioID no coincide, token no válido
+    } else {
+        // El usuarioID coincide, continuar con la lógica de la aplicación
+    }
+
     // Token válido
     // Verificar si se ha proporcionado un archivo
     try {

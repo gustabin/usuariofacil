@@ -1,6 +1,15 @@
 <?php
 // Incluir el archivo de configuración
 require '../../tools/config.php';
+// Variables de entrada
+session_start();
+// Verificar si la sesión está iniciada y si la clave 'usuarioID' está definida
+if (session_status() == PHP_SESSION_NONE || !isset($_SESSION['usuarioID'])) {
+    $response['status'] = 'error';
+    $response['message'] = 'La sesión no está iniciada o no se ha proporcionado el usuarioID';
+    echo json_encode($response);
+    exit;
+}
 
 // Array para la respuesta JSON
 $response = array();

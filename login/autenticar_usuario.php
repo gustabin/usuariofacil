@@ -1,6 +1,8 @@
 <?php
 // Incluir el archivo de configuración
 require '../tools/config.php';
+require '../tools/jwt.php';
+require '../tools/sed.php';
 
 // Variables de entrada (validación básica)
 $email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) : null;
@@ -8,16 +10,6 @@ $password = isset($_POST['password']) ? $_POST['password'] : null;
 
 // Array para la respuesta JSON
 $response = array();
-
-function jwt_encode($payload, $secret)
-{
-    $header = json_encode(array('typ' => 'JWT', 'alg' => 'HS256'));
-    $header = base64_encode($header);
-    $payload = base64_encode(json_encode($payload));
-    $signature = hash_hmac('sha256', "$header.$payload", $secret, true);
-    $signature = base64_encode($signature);
-    return "$header.$payload.$signature";
-}
 
 try {
     // Validar la entrada
@@ -57,12 +49,16 @@ try {
         $response['message'] = 'Inicio de sesión exitoso';
         $response['intentar_pago'] = $intentarPago;
 
-        // Genera el token JWT 
+        // Encriptar el usuarioID
+        $usuarioID_encriptado = encriptarUsuarioID($usuarioID, SECRET_KEY);
+
+        // Genera el token JWT  
         $payload = array(
-            "usuarioID" => $usuarioID,
+            "usuarioID" => $usuarioID_encriptado,
             "email" => $email,
             "exp" => time() + 3600 // Expira en una hora
         );
+        //Llamar al JWT para hacer encode
         $token = jwt_encode($payload, SECRET_KEY);
 
         // Agregar el token JWT a la respuesta

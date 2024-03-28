@@ -4,6 +4,15 @@ require '../../tools/config.php';
 
 // Conexión a la base de datos (usando MySQLi)
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+// Variables de entrada
+session_start();
+// Verificar si la sesión está iniciada y si la clave 'usuarioID' está definida
+if (session_status() == PHP_SESSION_NONE || !isset($_SESSION['usuarioID'])) {
+    $response['status'] = 'error';
+    $response['message'] = 'La sesión no está iniciada o no se ha proporcionado el usuarioID';
+    echo json_encode($response);
+    exit;
+}
 
 // Array para la respuesta JSON
 $response = array();
