@@ -1,6 +1,5 @@
 {
     "require": {
-        "tecnickcom/tcpdf": "^6.6",
-        "firebase/php-jwt": "^6.10"
+        "tecnickcom/tcpdf": "^6.6"
     }
 }
