@@ -1,2 +1,2 @@
-# Ignorar archivos de configuración PHP
+# Ignorar archivos de configuración PHP y recuerda subirlo via FTP
 tools/config.php
