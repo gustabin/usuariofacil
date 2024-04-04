@@ -44,9 +44,9 @@ try {
             <br><br>
             <br>
             El equipo de usuariofacil.<br>
-            <img src=http://www.gustabin.com/img/logoEmpresa.png height=50px width=50px />
+            <img src=https://www.stackcodelab.com/usuariofacil/imagen/logoEmpresa.png height=50px width=50px />
             <a href=https://www.facebook.com/gustabin2.0>
-            <img src=http://www.gustabin.com/img/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
+            <img src=https://www.stackcodelab.com/usuariofacil/imagen/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
             <h5>Desarrollado por Gustabin<br>
             Copyright © 2024. Todos los derechos reservados. Version 1.0.0 <br></h5>
             ";
@@ -60,9 +60,9 @@ try {
             Gracias por confiar en nosotros.
             <br>
             El equipo de usuariofacil.<br>
-            <img src=http://www.gustabin.com/img/logoEmpresa.png height=50px width=50px />
+            <img src=https://www.stackcodelab.com/usuariofacil/imagen/logoEmpresa.png height=50px width=50px />
             <a href=https://www.facebook.com/gustabin2.0>
-            <img src=http://www.gustabin.com/img/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
+            <img src=https://www.stackcodelab.com/usuariofacil/imagen/logoFacebook.jpg alt=Logo Facebook height=50px width=50px></a>
             <h5>Desarrollado por Gustabin<br>
             Copyright © 2024. Todos los derechos reservados. Version 1.0.0 <br></h5>
             ";
