@@ -1,4 +1,3 @@
-# Restringir el acceso a los endpoints
 <FilesMatch "\.(php|html?)$">
     # Permitir desde localhost (127.0.0.1)
     Require ip 127.0.0.1
@@ -15,4 +14,8 @@
 
     # Permitir desde el dominio localhost/usuariofacil
     Require expr %{HTTP_REFERER} == "http://localhost/usuariofacil/" || %{HTTP_REFERER} == "https://localhost/usuariofacil/"
+
+    # Permitir desde https://stackcodelab.com/usuariofacil/
+    Require host stackcodelab.com
+    Require expr %{HTTP_HOST} == "stackcodelab.com" && %{REQUEST_URI} =~ m#^/usuariofacil/#
 </FilesMatch>
