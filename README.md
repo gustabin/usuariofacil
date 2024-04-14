@@ -1,8 +1,6 @@
 ﻿# usuariofacil
-# Nombre del Proyecto
 
 ## Descripción
-
 "Construyendo un Carrito de Compras desde Cero: Prácticas de Arquitectura de Software"
 En este video te presento el sistema de información que hemos creado desde cero, aplicando rigurosas prácticas de arquitectura de software. Se trata de un emocionante recorrido por un Website diseñado especialmente como un carrito de compras, donde cada detalle ha sido cuidadosamente elaborado para ofrecer una experiencia de usuario óptima. Desde la gestión de transacciones hasta un completo dashboard para clientes, te mostraré cada funcionalidad detalladamente a lo largo del curso.
 
