@@ -1,0 +1,88 @@
+0 Website & Arquitectura de Software
+00 Website & Presentación
+01 Arquitectura de Software
+02 Herramientas Básicas
+03 Diseño de Tablas
+04 Relaciones de Tablas
+05 Registrar Usuario
+06 Verificar Usuario
+07 Autenticar Usuario
+08 Reestablecer Password
+09 Envio de Email
+10 QueryString | Link con token
+11 Cambiar Password
+12 Perfil de Usuario
+13 Actualizar Usuario
+14 Subir Imágenes
+15 Eliminar imágenes
+16 Postman | Try Catch
+17 FrontEnd Usuario
+18 Email Verificar Usuario
+19 Activar Usuario
+20 Autenticar Usuario
+21 Recuperar Password
+22 Incluir Botones
+23 Ingresar al sistema
+24 AdminLTE con PHP
+25 Sidebar en AdminLTE
+26 Navbar, Body y Footer en AdminLTE
+27 Dashboard en AdminLTE
+28 Secciones y Required
+29 Modulos en AdminLTE para Proyectos Únicos
+30 Incluir Usuario
+31 Variables de Session
+32 Imagen | Ventana Modal
+33 Módulo de Pedidos
+34 Módulo de Pagos
+35 Logout
+36 Página Index
+37 Github
+38 Variables de Entorno y Gitignore
+39 Custom Index
+40 Listar Productos
+41 Tabla Productos y Tarjetas Dinámicas
+42 Carrito de Compras
+43 Procesar Pagos
+44 Calcular Total a Pagar
+45 Guardar Pedido
+46 Login Condicional
+47 Actualizar Stock
+48 Listar Detalle de Pedidos
+49 Backup de Base de Datos MySQL desde PHPMyAdmin
+50 Listar Pagos
+51 Login en AdminLTE
+52 Recuperar Password en AdminLTE
+53 Incluir Usuario en AdminLTE
+54 Roles de Usuario
+55 Integración de Roles
+56 Gestión de Roles
+57 Ajuste de configuración
+58 Reporte PDF de Usuarios
+59 Reporte PDF de Productos
+60 Paso de Variables en JavaScript
+61 Mostrar Avatar con JS y CSS
+62 Menú Dinámico
+63 Insertar Perfil de Usuario
+64 Formulario de Contácto
+65 Seguridad en Formularios
+66 Ajuste de Contacto
+67 Módulo de Contacto
+68 Eliminar Contacto
+69 Protección con CSRF
+70 Seguridad en Compras
+71 Seguridad en Contacto y Login
+72 Seguridad en Usuarios | Util
+73 Seguridad en Contactos y Pagos
+74 Seguridad en Pedidos y Perfil
+75 Seguridad en Roles de Usuario
+76 Deploy en cPanel
+77 Pruebas Post Migración
+78 Enviar Email de Activación
+79 Resetear Password
+80 Seguridad con JWT
+81 Encapsulando el JWT
+82 Seguridad con .htaccess
+83 Evitar Request desde Postman
+84 Encriptar y Desencriptar Datos
+85 Mensajes con Sweet Alert
+86 Power Off
